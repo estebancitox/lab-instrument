@@ -1,0 +1,65 @@
+// Shared canvas utilities for all instruments.
+
+export const TAU = Math.PI * 2;
+export const RAD = Math.PI / 180;
+export const DPR_CAP = 3; // bounds bitmap memory on very-high-density phones
+
+export const P = {
+  plate: '#14171b',
+  face: '#252c35',
+  ring: 'rgba(139, 147, 156, 0.35)',
+  ink: '#e6e9ea',
+  inkSoft: 'rgba(230, 233, 234, 0.55)',
+  muted: '#8b939c',
+  signal: '#ff8a50',
+  sky: '#5d6f85',
+  earth: '#221c17',
+  hatch: '#3a322b',
+};
+
+export const font = (px, weight = 400) =>
+  `${weight} ${px}px "IBM Plex Mono", ui-monospace, monospace`;
+
+// Integer device-pixel backing size. Uses the exact device-pixel content box
+// when the observer provides it (and the cap is not in play); otherwise rounds
+// cssSize * dpr so transform and backing store always agree.
+export function backingSize(canvas, entry) {
+  const dpr = window.devicePixelRatio || 1;
+  const box = entry && entry.devicePixelContentBoxSize && entry.devicePixelContentBoxSize[0];
+  if (box && dpr <= DPR_CAP) return { w: box.inlineSize, h: box.blockSize };
+  const capped = Math.min(dpr, DPR_CAP);
+  return {
+    w: Math.round(canvas.clientWidth * capped),
+    h: Math.round(canvas.clientHeight * capped),
+  };
+}
+
+export function applyBacking(canvas, size) {
+  if (canvas.width === size.w && canvas.height === size.h) return false;
+  canvas.width = size.w;
+  canvas.height = size.h;
+  return true;
+}
+
+// Offscreen layer at device resolution, addressed in CSS-px coordinates.
+export function layer(cssW, cssH, scale) {
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.ceil(cssW * scale));
+  c.height = Math.max(1, Math.ceil(cssH * scale));
+  const ctx = c.getContext('2d');
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  return { canvas: c, ctx };
+}
+
+// Instrument face: flat fill plus a hairline ring. No shadows, no gradients.
+export function drawFace(ctx, cx, cy, r) {
+  ctx.fillStyle = P.face;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, TAU);
+  ctx.fill();
+  ctx.strokeStyle = P.ring;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 0.5, 0, TAU);
+  ctx.stroke();
+}
