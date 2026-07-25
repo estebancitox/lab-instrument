@@ -28,6 +28,8 @@
   --plate-ink: #e6e9ea;
   --plate-muted: #8b939c;
   --signal: #ff8a50;
+  /* the plate's seat on the page: hairline edge in light, none in dark */
+  --plate-edge: #d9dee1;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace;
   --pad: max(clamp(1.25rem, 5vw, 3rem), calc((100% - 46rem) / 2));
   color-scheme: light;
@@ -38,6 +40,7 @@
   --muted: #8b939c;
   --line: #2a2f35;
   --accent: #ff8a50;
+  --plate-edge: transparent;
   color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
@@ -47,6 +50,7 @@
     --muted: #8b939c;
     --line: #2a2f35;
     --accent: #ff8a50;
+    --plate-edge: transparent;
     color-scheme: dark;
   }
 }
@@ -105,12 +109,13 @@ main { flex: 1; padding: 0 var(--pad) 2rem; }
 
 .panel {
   background: var(--plate);
-  border-radius: 6px;
-  padding: clamp(1.25rem, 4.5vw, 2rem);
+  border: 1px solid var(--plate-edge);
+  border-radius: 8px;
+  padding: clamp(1rem, 3.5vw, 1.25rem);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
   touch-action: pan-y;
   cursor: default;
   max-width: 100%;
@@ -128,8 +133,8 @@ main { flex: 1; padding: 0 var(--pad) 2rem; }
 .readout {
   margin: 0;
   color: var(--plate-ink);
-  font-size: clamp(0.6875rem, 2.9vw, 0.875rem);
-  letter-spacing: 0.03em;
+  font-size: clamp(0.6875rem, 2.9vw, 0.8125rem); /* 13px caps it at gauge width */
+  letter-spacing: 0.02em;
   white-space: pre;
 }
 .readout .flag {
