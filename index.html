@@ -25,6 +25,8 @@
            aria-label="Flight instrument panel. Use arrow keys to fly, space to toggle autopilot."
            aria-describedby="hint">
         <div class="gauges">
+          <canvas id="airspeed" role="img"
+                  aria-label="Airspeed indicator in knots, with normal range arc, caution band, and never-exceed mark"></canvas>
           <canvas id="attitude" role="img"
                   aria-label="Attitude indicator: artificial horizon showing pitch and roll"></canvas>
           <canvas id="altimeter" role="img"
@@ -51,7 +53,7 @@
   <footer class="site-footer">
     <p>&copy; 2026 Sergio Esteban Torres &middot; Set in IBM&nbsp;Plex&nbsp;Mono
       &middot; Canvas&nbsp;2D, one requestAnimationFrame
-      &middot; <span id="wire-note">27&nbsp;KB wire</span>
+      &middot; <span id="wire-note">28&nbsp;KB wire</span>
       &middot; <a href="https://github.com/estebancitox/lab-instrument">source&nbsp;<span aria-hidden="true">&#8599;</span></a></p>
   </footer>
 

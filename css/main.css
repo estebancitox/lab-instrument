@@ -31,7 +31,7 @@
   /* the plate's seat on the page: hairline edge in light, none in dark */
   --plate-edge: #d9dee1;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace;
-  --pad: max(clamp(1.25rem, 5vw, 3rem), calc((100% - 46rem) / 2));
+  --pad: max(clamp(1.25rem, 5vw, 3rem), calc((100% - 60rem) / 2));
   color-scheme: light;
 }
 [data-theme="dark"] {
@@ -132,11 +132,16 @@ main { flex: 1; padding: 0 var(--pad) 2rem; }
 }
 .gauges canvas {
   display: block;
-  width: min(78vw, 300px);
+  width: min(78vw, 280px);
   aspect-ratio: 1;
 }
-/* below the width where two gauges fit side by side, stack deliberately so
-   the plate hugs the column instead of keeping its two-up width */
+/* from 768px the three gauges hold one row (the basic-T top row), sized
+   fluidly; the 13rem budget covers page/panel chrome (178px) plus a classic
+   space-taking scrollbar, so the row holds even on Windows. Below 768px,
+   a deliberate hugging column. */
+@media (min-width: 768px) {
+  .gauges canvas { width: min(calc((100vw - 13rem) / 3), 280px); }
+}
 @media (max-width: 767px) {
   .gauges { flex-direction: column; }
 }

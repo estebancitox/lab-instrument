@@ -84,6 +84,31 @@ export function wheelPos(v, k) {
   return digit + t;
 }
 
+// Shared needle: tapered lance with counterweight tail, plus the hub.
+// rot is rotation from straight-up, in radians.
+export function drawNeedle(ctx, cx, cy, rot, faceR) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(rot);
+  ctx.fillStyle = P.ink;
+  ctx.beginPath();
+  ctx.moveTo(0, -faceR * 0.8);       // tip
+  ctx.lineTo(-2.4, -faceR * 0.06);
+  ctx.lineTo(-3.2, faceR * 0.2);     // counterweight tail
+  ctx.lineTo(3.2, faceR * 0.2);
+  ctx.lineTo(2.4, -faceR * 0.06);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+  ctx.fillStyle = P.face;
+  ctx.strokeStyle = P.ink;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 6, 0, TAU);
+  ctx.fill();
+  ctx.stroke();
+}
+
 // Instrument face: flat fill plus a hairline ring. No shadows, no gradients.
 export function drawFace(ctx, cx, cy, r) {
   ctx.fillStyle = P.face;

@@ -3,7 +3,7 @@
 // static; per frame the drum blits slices of a pre-rendered digit strip and
 // the needle is one filled path. No per-frame fillText.
 
-import { TAU, RAD, P, font, layer, drawFace, makeDigitStrip, wheelPos } from './gauge.js';
+import { TAU, RAD, P, font, layer, drawFace, drawNeedle, makeDigitStrip, wheelPos } from './gauge.js';
 
 const WHEELS = [4, 3, 2, 1, 0]; // powers of ten, left to right
 const DRUM_BG = '#1b2026';      // recessed slot, one step below the face
@@ -115,27 +115,6 @@ export function draw(a, sim) {
   ctx.strokeStyle = P.ring;
   ctx.strokeRect(drum.x - 0.5, drum.y - 0.5, drum.w + 1, drum.h + 1);
 
-  // needle: tapered lance with counterweight tail, 1,000 ft per revolution
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(((alt % 1000) / 1000) * TAU);
-  ctx.fillStyle = P.ink;
-  ctx.beginPath();
-  ctx.moveTo(0, -faceR * 0.8);       // tip
-  ctx.lineTo(-2.4, -faceR * 0.06);
-  ctx.lineTo(-3.2, faceR * 0.2);     // counterweight tail
-  ctx.lineTo(3.2, faceR * 0.2);
-  ctx.lineTo(2.4, -faceR * 0.06);
-  ctx.closePath();
-  ctx.fill();
-  ctx.restore();
-
-  // hub
-  ctx.fillStyle = P.face;
-  ctx.strokeStyle = P.ink;
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.arc(cx, cy, 6, 0, TAU);
-  ctx.fill();
-  ctx.stroke();
+  // 1,000 ft per revolution
+  drawNeedle(ctx, cx, cy, ((alt % 1000) / 1000) * TAU, faceR);
 }

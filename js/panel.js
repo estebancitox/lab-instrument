@@ -4,10 +4,12 @@ import { createSim, step, setComposedFrame, setDragTargets, setMode } from './si
 import { backingSize, applyBacking } from './gauge.js';
 import * as attitude from './attitude.js';
 import * as altimeter from './altimeter.js';
+import * as airspeed from './airspeed.js';
 
 const panel = document.getElementById('panel');
 const attEl = document.getElementById('attitude');
 const altEl = document.getElementById('altimeter');
+const asiEl = document.getElementById('airspeed');
 const modeFlag = document.getElementById('mode-flag');
 const readoutData = document.getElementById('readout-data');
 const srStatus = document.getElementById('sr-status');
@@ -17,6 +19,7 @@ const themeBtn = document.getElementById('theme-toggle');
 
 const sim = createSim();
 const instruments = [
+  { el: asiEl, api: airspeed, inst: airspeed.createAirspeed(asiEl) },
   { el: attEl, api: attitude, inst: attitude.createAttitude(attEl) },
   { el: altEl, api: altimeter, inst: altimeter.createAltimeter(altEl) },
 ];
