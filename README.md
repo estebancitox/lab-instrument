@@ -5,13 +5,7 @@ flight — vanilla JS, no frameworks, no build step.
 
 **Live demo:** <https://estebancitox.github.io/lab-instrument/>
 
-<!-- demo.gif placeholder ------------------------------------------------
-Record ~8 seconds of the autopilot demo (QuickTime screen recording or Kap),
-convert to GIF (Kap exports directly; for QuickTime use e.g. gifski), save as
-demo.gif in the repo root, then replace this comment with:
-
-![Attitude indicator flying gentle maneuvers](demo.gif)
-------------------------------------------------------------------------- -->
+![Flight instrument panel flying gentle maneuvers on autopilot](demo.gif)
 
 ## How the sim works
 
@@ -27,15 +21,15 @@ atmosphere so nothing is ever perfectly still.
 
 ## Controls
 
-| Input | Action |
-| --- | --- |
-| Click / focus the panel | Enable the keyboard controls |
-| `←` `→` | Roll (auto-centers on release) |
-| `↑` `↓` | Pitch (holds on release) |
-| `Space` | Toggle autopilot / manual |
-| Drag on the panel | Virtual stick (manual mode, touch or mouse) |
-| `Esc` | Release the panel (return to normal page keys) |
-| Buttons under the panel | Take controls · Pause |
+| Input                   | Action                                         |
+| ----------------------- | ---------------------------------------------- |
+| Click / focus the panel | Enable the keyboard controls                   |
+| `←` `→`                 | Roll (auto-centers on release)                 |
+| `↑` `↓`                 | Pitch (holds on release)                       |
+| `Space`                 | Toggle autopilot / manual                      |
+| Drag on the panel       | Virtual stick (manual mode, touch or mouse)    |
+| `Esc`                   | Release the panel (return to normal page keys) |
+| Buttons under the panel | Take controls · Pause                          |
 
 Arrow keys or `Space` take over from the autopilot; drag needs manual mode
 first ("Take controls"). "Engage autopilot" hands it back.
