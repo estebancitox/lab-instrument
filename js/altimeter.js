@@ -112,7 +112,8 @@ export function draw(a, sim) {
     ctx.lineTo(x, drum.y + drum.h);
     ctx.stroke();
   }
-  ctx.strokeStyle = P.ring;
+  // solid frame: strong enough to visually contain mid-roll half-digits
+  ctx.strokeStyle = P.muted;
   ctx.strokeRect(drum.x - 0.5, drum.y - 0.5, drum.w + 1, drum.h + 1);
 
   // 1,000 ft per revolution

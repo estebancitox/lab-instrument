@@ -92,11 +92,12 @@ export function drawNeedle(ctx, cx, cy, rot, faceR) {
   ctx.rotate(rot);
   ctx.fillStyle = P.ink;
   ctx.beginPath();
-  ctx.moveTo(0, -faceR * 0.8);       // tip
-  ctx.lineTo(-2.4, -faceR * 0.06);
-  ctx.lineTo(-3.2, faceR * 0.2);     // counterweight tail
-  ctx.lineTo(3.2, faceR * 0.2);
-  ctx.lineTo(2.4, -faceR * 0.06);
+  ctx.moveTo(-1, -faceR * 0.8);      // blunt tip: reads at distance
+  ctx.lineTo(1, -faceR * 0.8);
+  ctx.lineTo(3.2, -faceR * 0.06);    // bold shaft: dominates what it crosses
+  ctx.lineTo(3.4, faceR * 0.16);     // short tail, barely wider than shaft
+  ctx.lineTo(-3.4, faceR * 0.16);
+  ctx.lineTo(-3.2, -faceR * 0.06);
   ctx.closePath();
   ctx.fill();
   ctx.restore();

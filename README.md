@@ -22,8 +22,8 @@ pitch and roll are tracked through a critically damped spring, so needles ease
 — they never teleport. Heading follows the coordinated-turn formula
 `(g / V) · tan(bank)`, vertical speed follows pitch and speed, and an envelope
 guard keeps the flight inside 3,000–9,000 ft and 95–155 kt so the demo never
-wanders off scale. Two incommensurate sine waves add a little atmosphere so
-nothing is ever perfectly still.
+wanders off scale. Two incommensurate sine waves per axis add a little
+atmosphere so nothing is ever perfectly still.
 
 ## Controls
 
@@ -34,16 +34,17 @@ nothing is ever perfectly still.
 | `↑` `↓` | Pitch (holds on release) |
 | `Space` | Toggle autopilot / manual |
 | Drag on the panel | Virtual stick (manual mode, touch or mouse) |
+| `Esc` | Release the panel (return to normal page keys) |
 | Buttons under the panel | Take controls · Pause |
 
-Any flight input takes over from the autopilot; "Engage autopilot" hands it
-back.
+Arrow keys or `Space` take over from the autopilot; drag needs manual mode
+first ("Take controls"). "Engage autopilot" hands it back.
 
 ## Performance & accessibility
 
 - Everything static (bezel, graduations, the entire horizon ball with its
   pitch ladder) is pre-rendered to offscreen bitmaps once per resize; the
-  altimeter's rolling drum blits slices of a pre-rendered 0&ndash;9 digit
+  altimeter's rolling drum blits slices of a pre-rendered 0–9 digit
   strip. A frame is a few `drawImage` calls — no per-frame text
   rasterization.
 - Backing stores use exact integer device pixels (device-pixel content box

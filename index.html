@@ -38,13 +38,13 @@
         <button id="mode-btn" type="button">Take controls</button>
         <button id="motion-btn" type="button">Pause</button>
       </div>
-      <p class="hint" id="hint">click panel &middot; &larr; &rarr; roll &middot; &uarr; &darr; pitch &middot; drag to fly &middot; space autopilot</p>
+      <p class="hint" id="hint"><span>click panel</span> &middot; <span>&larr; &rarr; roll</span> &middot; <span>&uarr; &darr; pitch</span> &middot; <span>drag to fly (manual)</span> &middot; <span>space autopilot</span></p>
       <p id="sr-status" class="visually-hidden" role="status"></p>
     </section>
 
     <p class="explainer">
       A simulated aircraft flies gentle, continuous maneuvers; the instruments
-      read its state at 60 frames per second. Canvas 2D and vanilla
+      read its state every display frame. Canvas 2D and vanilla
       JavaScript &mdash; no frameworks, no build step. Take the controls, or
       let the autopilot wander.
     </p>
@@ -53,7 +53,7 @@
   <footer class="site-footer">
     <p>&copy; 2026 Sergio Esteban Torres &middot; Set in IBM&nbsp;Plex&nbsp;Mono
       &middot; Canvas&nbsp;2D, one requestAnimationFrame
-      &middot; <span id="wire-note">28&nbsp;KB wire</span>
+      &middot; <span id="wire-note">29&nbsp;KB wire</span>
       &middot; <a href="https://github.com/estebancitox/lab-instrument">source&nbsp;<span aria-hidden="true">&#8599;</span></a></p>
   </footer>
 

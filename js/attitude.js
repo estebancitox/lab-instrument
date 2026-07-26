@@ -80,7 +80,9 @@ function buildBall(a) {
       ctx.moveTo(c - half, y);
       ctx.lineTo(c + half, y);
       ctx.stroke();
-      if (major) {
+      // 30-deg numerals sit on the clip edge at wings level and would be
+      // half-swallowed by the mask; the rung alone marks 30
+      if (major && deg <= 20) {
         ctx.fillStyle = P.ink;
         ctx.textAlign = 'right';
         ctx.fillText(String(deg), c - half - 6, y);

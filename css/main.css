@@ -98,6 +98,8 @@ a:hover { text-decoration-color: var(--accent); }
   border: none;
   padding: 0.1rem 0.2rem;
   cursor: pointer;
+  text-decoration: underline dotted; /* it's a control, not a status label */
+  text-underline-offset: 0.2em;
 }
 #theme-toggle:hover { color: var(--ink); }
 
@@ -181,6 +183,7 @@ main { flex: 1; padding: 0 var(--pad) 2rem; }
   margin: 0.75rem 0 0;
   text-align: center;
 }
+.hint span { white-space: nowrap; } /* wrap between commands, never inside */
 
 .explainer {
   color: var(--muted);
