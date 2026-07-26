@@ -124,10 +124,21 @@ main { flex: 1; padding: 0 var(--pad) 2rem; }
 }
 .panel.man { touch-action: none; }
 
-#attitude {
+.gauges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.75rem, 2.5vw, 1.25rem);
+}
+.gauges canvas {
   display: block;
-  width: min(78vw, 340px);
+  width: min(78vw, 300px);
   aspect-ratio: 1;
+}
+/* below the width where two gauges fit side by side, stack deliberately so
+   the plate hugs the column instead of keeping its two-up width */
+@media (max-width: 767px) {
+  .gauges { flex-direction: column; }
 }
 
 .readout {

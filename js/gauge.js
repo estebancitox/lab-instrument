@@ -51,6 +51,39 @@ export function layer(cssW, cssH, scale) {
   return { canvas: c, ctx };
 }
 
+// Vertical 0–9 digit strip (plus a wrap-around 0) at device resolution.
+// Drum wheels blit slices of this per frame instead of rasterizing text.
+export function makeDigitStrip(fontPx, scale, color, bg) {
+  const probe = document.createElement('canvas').getContext('2d');
+  probe.font = font(fontPx, 600);
+  const cellW = Math.ceil(probe.measureText('0').width + fontPx * 0.5);
+  const cellH = Math.ceil(fontPx * 1.4);
+  const { canvas, ctx } = layer(cellW, cellH * 11, scale);
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, cellW, cellH * 11);
+  ctx.fillStyle = color;
+  ctx.font = font(fontPx, 600);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (let i = 0; i < 11; i++) {
+    ctx.fillText(String(i % 10), cellW / 2, i * cellH + cellH / 2);
+  }
+  return { canvas, cellW, cellH };
+}
+
+// Odometer wheel position for the 10^k digit of v, in [0, 10): the ones
+// wheel rolls continuously; each higher wheel rolls only while the wheels
+// below it sweep their final 10%, like a mechanical carry.
+export function wheelPos(v, k) {
+  const base = 10 ** k;
+  if (k === 0) return v % 10;
+  const digit = Math.floor(v / base) % 10;
+  const lower = v % base;
+  const carry = base * 0.1;
+  const t = Math.max(0, (lower - (base - carry)) / carry);
+  return digit + t;
+}
+
 // Instrument face: flat fill plus a hairline ring. No shadows, no gradients.
 export function drawFace(ctx, cx, cy, r) {
   ctx.fillStyle = P.face;

@@ -2,10 +2,12 @@
 
 import { createSim, step, setComposedFrame, setDragTargets, setMode } from './sim.js';
 import { backingSize, applyBacking } from './gauge.js';
-import { createAttitude, rebuild, draw } from './attitude.js';
+import * as attitude from './attitude.js';
+import * as altimeter from './altimeter.js';
 
 const panel = document.getElementById('panel');
-const canvas = document.getElementById('attitude');
+const attEl = document.getElementById('attitude');
+const altEl = document.getElementById('altimeter');
 const modeFlag = document.getElementById('mode-flag');
 const readoutData = document.getElementById('readout-data');
 const srStatus = document.getElementById('sr-status');
@@ -14,7 +16,14 @@ const motionBtn = document.getElementById('motion-btn');
 const themeBtn = document.getElementById('theme-toggle');
 
 const sim = createSim();
-const att = createAttitude(canvas);
+const instruments = [
+  { el: attEl, api: attitude, inst: attitude.createAttitude(attEl) },
+  { el: altEl, api: altimeter, inst: altimeter.createAltimeter(altEl) },
+];
+
+function drawAll() {
+  for (const g of instruments) g.api.draw(g.inst, sim);
+}
 
 // ---- run condition: one derived flag, four inputs -------------------------
 
@@ -42,7 +51,7 @@ function frame(ts) {
   const dt = Math.min((ts - lastTs) / 1000, 0.05); // no teleporting after pauses
   lastTs = ts;
   if (dt > 0) step(sim, dt, inputState());
-  draw(att, sim);
+  drawAll();
   readoutAcc += dt;
   if (readoutAcc >= 0.1) {
     readoutAcc = 0;
@@ -60,7 +69,7 @@ function frame(ts) {
 }
 
 function renderOnce() {
-  draw(att, sim);
+  drawAll();
   updateReadout();
 }
 
@@ -214,42 +223,55 @@ new IntersectionObserver(entries => {
 
 // ---- sizing: exact device pixels, debounced rebuilds ----------------------
 
-let sized = false;
+const sizedEls = new Set();
+const pending = new Map(); // canvas -> latest ResizeObserver entry (or null)
 let resizeTimer = 0;
 
-function resizeNow(entry) {
-  const size = backingSize(canvas, entry);
-  if (!applyBacking(canvas, size) && sized) return;
-  sized = true;
-  rebuild(att);
-  renderOnce();
+function resizeNow() {
+  let painted = false;
+  for (const [el, entry] of pending) {
+    pending.delete(el);
+    const g = instruments.find(i => i.el === el);
+    const size = backingSize(el, entry);
+    if (!applyBacking(el, size) && sizedEls.has(el)) continue;
+    sizedEls.add(el);
+    g.api.rebuild(g.inst);
+    painted = true;
+  }
+  if (painted) renderOnce();
+}
+
+function queueResize(immediate) {
+  clearTimeout(resizeTimer);
+  if (immediate) resizeNow();
+  else resizeTimer = setTimeout(resizeNow, 150);
 }
 
 const ro = new ResizeObserver(entries => {
-  if (!sized) {
-    resizeNow(entries[0]);
-    return;
+  let firstSizing = false;
+  for (const e of entries) {
+    pending.set(e.target, e);
+    if (!sizedEls.has(e.target)) firstSizing = true;
   }
-  const entry = entries[0];
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => resizeNow(entry), 150);
+  queueResize(firstSizing);
 });
 let fallbackSizing = false;
 try {
-  ro.observe(canvas, { box: 'device-pixel-content-box' });
+  for (const g of instruments) ro.observe(g.el, { box: 'device-pixel-content-box' });
 } catch {
   fallbackSizing = true;
-  ro.observe(canvas); // Safari: content-box + dpr math
+  for (const g of instruments) ro.observe(g.el); // Safari: content-box + dpr math
 }
+const queueAll = immediate => {
+  for (const g of instruments) if (!pending.has(g.el)) pending.set(g.el, null);
+  queueResize(immediate);
+};
 if (fallbackSizing) {
   // zoom fires resize; monitor moves change dpr with no resize at all
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => resizeNow(null), 150);
-  });
+  window.addEventListener('resize', () => queueAll(false));
   const watchDpr = () => {
     matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
-      .addEventListener('change', () => { resizeNow(null); watchDpr(); }, { once: true });
+      .addEventListener('change', () => { queueAll(true); watchDpr(); }, { once: true });
   };
   watchDpr();
 }
@@ -261,10 +283,14 @@ Promise.all([
   document.fonts.load('400 16px "IBM Plex Mono"'),
   document.fonts.load('600 16px "IBM Plex Mono"'),
 ]).catch(() => {}).then(() => {
-  if (sized) {
-    rebuild(att);
-    renderOnce();
+  let painted = false;
+  for (const g of instruments) {
+    if (sizedEls.has(g.el)) {
+      g.api.rebuild(g.inst);
+      painted = true;
+    }
   }
+  if (painted) renderOnce();
 });
 
 // ---- theme toggle (parity with the portfolio) -----------------------------

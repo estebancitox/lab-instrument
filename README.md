@@ -42,8 +42,10 @@ back.
 ## Performance & accessibility
 
 - Everything static (bezel, graduations, the entire horizon ball with its
-  pitch ladder) is pre-rendered to offscreen bitmaps once per resize; a frame
-  is a few `drawImage` calls — no per-frame text rasterization.
+  pitch ladder) is pre-rendered to offscreen bitmaps once per resize; the
+  altimeter's rolling drum blits slices of a pre-rendered 0&ndash;9 digit
+  strip. A frame is a few `drawImage` calls — no per-frame text
+  rasterization.
 - Backing stores use exact integer device pixels (device-pixel content box
   where available), so lines stay crisp at fractional devicePixelRatio.
 - The loop pauses when the tab is hidden, when the panel is off-screen, and
