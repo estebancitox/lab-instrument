@@ -50,4 +50,4 @@ first ("Take controls"). "Engage autopilot" hands it back.
 - Each canvas has an `aria-label`; a visually hidden status region announces
   mode changes and a summary every few seconds (the visible 10 Hz readout is
   deliberately not a live region).
-- Self-hosted IBM Plex Mono, latin subset, two files, 11.7 KB total.
+- Self-hosted IBM Plex Mono, latin subset, two files, 11.4 KB total.
